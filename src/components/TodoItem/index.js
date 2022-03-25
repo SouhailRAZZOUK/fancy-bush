@@ -13,13 +13,21 @@ const TodoItem = ({ id, text, isDone, onItemDelete }) => {
   }, [id, onItemDelete]);
 
   const handleItemPan = useCallback((event) => {
-    setPositionX(event?.deltaX);
+    const deltaX = event?.deltaX;
+    if (deltaX > 0) {
+      setPositionX(event?.deltaX);
+    }
   }, []);
 
-  const handleItemPanEnd = useCallback((event) => {
-    console.log("Pan End Event: ", event);
-    setPositionX(0);
-  }, []);
+  const handleItemPanEnd = useCallback(
+    (event) => {
+      setPositionX(0);
+      if (event?.deltaX > THRESHOLD) {
+        handleItemDelete();
+      }
+    },
+    [handleItemDelete]
+  );
 
   useEffect(() => {
     const ht = new Hammer(itemRef.current, {});
