@@ -1,16 +1,21 @@
 import { useCallback, useState } from "react";
+import { useDispatch } from "react-redux";
+import { addTodoItem } from "../../redux/actions";
 
-const TodoAdd = ({ onAddItem }) => {
+const TodoAdd = () => {
+  const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState("");
 
   const handleItemAdd = useCallback(() => {
-    onAddItem({
+    const newItem = {
       text: inputValue,
       id: Math.random(),
       isDone: false,
-      createdAt: new Date()
-    });
-  }, [onAddItem, inputValue]);
+      createdAt: new Date(),
+    };
+
+    dispatch(addTodoItem(newItem));
+  }, [dispatch, inputValue]);
 
   const handleInputChange = ({ target }) => {
     setInputValue(target?.value);
